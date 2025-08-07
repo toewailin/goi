@@ -11,10 +11,16 @@ curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/install_gobase.
 2. **Check if the installation was successful**:
 
 ```bash
-gobase --version
+gobase version
 ```
 
+3. **Run the following command** to uninstall GoBase:
+   
+```bash
+curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/uninstall_gobase.sh | bash
+```
 
+Project Structure
 ```plaintext
 
 myapp/
