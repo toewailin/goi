@@ -102,11 +102,11 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
    * Compile the Go project into a binary.
 
    ```bash
-   go build -o gobase
+    go build -o gobase-osx
     GOOS=linux GOARCH=amd64 go build -o gobase-linux
     GOOS=windows GOARCH=amd64 go build -o gobase.exe
    
-   
+
    ```
 
    This will generate a binary file called `gobase` in the current directory.
