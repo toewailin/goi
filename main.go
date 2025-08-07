@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,29 @@ func cloneRepo(projectName string) error {
 	return cmd.Run()
 }
 
+// updateGoMod updates the module name in the go.mod file to match the project name
+func updateGoMod(projectName string) error {
+	// Path to the go.mod file in the newly cloned project
+	goModPath := filepath.Join(projectName, "go.mod")
+
+	// Read the go.mod file
+	data, err := os.ReadFile(goModPath)
+	if err != nil {
+		return fmt.Errorf("failed to read go.mod file: %w", err)
+	}
+
+	// Update the module name to match the project name
+	updatedData := strings.Replace(string(data), "module go-project", fmt.Sprintf("module %s", projectName), 1)
+
+	// Write the updated content back to the go.mod file
+	err = os.WriteFile(goModPath, []byte(updatedData), 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write go.mod file: %w", err)
+	}
+
+	return nil
+}
+
 // createProjectCmd is the 'new' command to create a new Go project
 var createProjectCmd = &cobra.Command{
 	Use:   "new",
@@ -33,6 +57,11 @@ var createProjectCmd = &cobra.Command{
 		// Clone the project template into the specified directory
 		if err := cloneRepo(projectName); err != nil {
 			return fmt.Errorf("failed to clone repository: %w", err)
+		}
+
+		// Update the go.mod file with the correct module name
+		if err := updateGoMod(projectName); err != nil {
+			return fmt.Errorf("failed to update go.mod: %w", err)
 		}
 
 		// Run any initialization commands, such as `go mod tidy` (optional)
