@@ -1,6 +1,22 @@
 ## Golang Scaffolded Application Structure
 This directory structure is designed to provide a solid foundation for a Golang application. It includes the main entry points for the application, configuration files, and templates for generating controllers, models, and migrations. The `config` directory contains configuration files for the database, Redis, and JWT, while the `scaffolding` directory contains templates for generating controllers, models, and migrations. The `cli` directory contains the CLI tools entry point, which can be used for generating scaffolding files.
 
+install
+
+```plaintext
+
+1. **Run the following command** to install GoBase:
+
+```bash
+curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/install_gobase.sh | bash
+```
+
+2. **Check if the installation was successful**:
+
+```bash
+gobase --version
+```
+
 
 ```plaintext
 
