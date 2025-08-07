@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version = "v1.0.0" // Define the version of your CLI
+
 // cloneRepo clones the Go project template repository
 func cloneRepo(projectName string) error {
 	// Specify the repository URL
@@ -78,11 +80,22 @@ var createProjectCmd = &cobra.Command{
 	},
 }
 
+// versionCmd is the 'version' command to show the current version of the CLI
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Show the current version of the CLI",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("GoBase CLI version %s\n", version)
+	},
+}
+
 func main() {
 	var rootCmd = &cobra.Command{Use: "gobase"}
 
 	// Add the 'new' command to create a project
 	rootCmd.AddCommand(createProjectCmd)
+	// Add the 'version' command to show the current version
+	rootCmd.AddCommand(versionCmd)
 
 	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {

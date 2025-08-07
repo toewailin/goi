@@ -30,7 +30,7 @@ sudo mv "$GOBASE_BINARY" /usr/local/bin/gobase
 # Verify installation
 if command -v gobase &>/dev/null; then
     echo "GoBase installed successfully!"
-    gobase --version
+    gobase version
 else
     echo "GoBase installation failed."
     exit 1
