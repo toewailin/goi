@@ -20,7 +20,51 @@ gobase version
 curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/uninstall_gobase.sh | bash
 ```
 
-Project Structure
+### **4. Usage**
+
+After the installation, you can run the GoBase CLI with the following command format:
+
+```bash
+gobase [command]
+```
+
+#### **Available Commands:**
+
+* **`completion`**: Generate the autocompletion script for the specified shell.
+
+  Example usage:
+
+  ```bash
+  gobase completion
+  ```
+
+* **`help`**: Display help about any command.
+
+  Example usage:
+
+  ```bash
+  gobase help
+  ```
+
+* **`new`**: Create a new Go project using a project template (based on the GoBase templates).
+
+  Example usage:
+
+  ```bash
+  gobase new project-name
+  ```
+
+* **`version`**: Display the current version of GoBase.
+
+  Example usage:
+
+  ```bash
+  gobase version
+  ```
+
+---
+
+#### Project Structure
 ```plaintext
 
 myapp/
