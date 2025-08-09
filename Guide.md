@@ -1,7 +1,3 @@
-Sure! Here’s a documentation guide for creating a `gobase` project, uploading it as a release on GitHub, and setting it up for installation on macOS. After downloading the binary, the user will be able to make it executable, move it to `/usr/local/bin`, and use it to download the Go project template from the specified URL.
-
----
-
 # **How to Create, Upload, and Install `gobase` Project**
 
 This guide will walk you through the steps to:
