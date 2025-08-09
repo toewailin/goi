@@ -1,31 +1,88 @@
-## Golang Scaffolded Application Structure
+### **goi**
+
+### **Introduction**
+
+`goi` is a Go project template generator that allows you to quickly set up a new Go project based on a pre-configured template. This documentation covers the process of installing and uninstalling `goi` using the provided scripts.
+
+---
+
+### **Installation Script**
+
+To install the `goi` tool, you can execute a simple script that will download and set up the binary file on your system.
+
+#### **Steps to Install `goi`:**
+
+1. **Run the Installation Command**
+
+   Use `curl` to download and run the installation script directly from GitHub. This command will automatically download the `goi` binary, make it executable, and place it in the appropriate directory.
+
+   ```bash
+   curl -o- https://raw.githubusercontent.com/toewailin/goi/main/install_goi.sh | bash
+   ```
+
+2. **What Happens During Installation:**
+
+   * **Download**: The script downloads the `goi` binary (e.g., `goi-osx`) from the GitHub releases.
+   * **Make Executable**: It sets the downloaded binary as executable using `chmod +x`.
+   * **Move Binary**: It moves the binary to `/usr/local/bin/goi`, making it accessible globally via the command line.
+   * **Final Output**: Once the installation is complete, you should be able to use `goi` as a command from anywhere on your system.
+
+3. **Verify Installation**
+
+   After the installation is complete, you can verify that `goi` was installed correctly by running:
+
+   ```bash
+   goi --version
+   ```
+
+   This should display the version of `goi`, confirming that it was installed successfully.
+
+---
+
+### **Uninstallation Script**
+
+To remove `goi` from your system, you can execute the uninstallation script. This script removes the binary and any associated files.
+
+#### **Steps to Uninstall `goi`:**
+
+1. **Run the Uninstallation Command**
+
+   Use the following command to uninstall `goi`:
+
+   ```bash
+   curl -o- https://raw.githubusercontent.com/toewailin/goi/main/uninstall_goi.sh | bash
+   ```
+
+2. **What Happens During Uninstallation:**
+
+   * **Remove Binary**: The script checks if `goi` is installed in `/usr/local/bin` and removes it.
+   * **Remove Temporary Files**: If `goi-osx` is found in the `~/Downloads` folder, it will be removed.
+   * **Clean Up Project Template**: Optionally, the script can remove any project templates you may have cloned (this step is not mandatory).
+
+3. **Verify Uninstallation**
+
+   To confirm that `goi` has been successfully uninstalled, you can run:
+
+   ```bash
+   which goi
+   ```
+
+   This should return an empty result, indicating that `goi` is no longer installed.
+
+---
+
+### **Go Project Scaffolded Application Structure**
+
 This directory structure is designed to provide a solid foundation for a Golang application. It includes the main entry points for the application, configuration files, and templates for generating controllers, models, and migrations. The `config` directory contains configuration files for the database, Redis, and JWT, while the `scaffolding` directory contains templates for generating controllers, models, and migrations. The `cli` directory contains the CLI tools entry point, which can be used for generating scaffolding files.
 
+---
 
-1. **Run the following command** to install GoBase:
+### **Usage**
 
-```bash
-curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/install_gobase.sh | bash
-```
-
-2. **Check if the installation was successful**:
+After installation, you can run the `goi` CLI with the following command format:
 
 ```bash
-gobase version
-```
-
-3. **Run the following command** to uninstall GoBase:
-   
-```bash
-curl -o- https://raw.githubusercontent.com/toewailin/gobase/main/uninstall_gobase.sh | bash
-```
-
-### **4. Usage**
-
-After the installation, you can run the GoBase CLI with the following command format:
-
-```bash
-gobase [command]
+goi [command]
 ```
 
 #### **Available Commands:**
@@ -35,7 +92,7 @@ gobase [command]
   Example usage:
 
   ```bash
-  gobase completion
+  goi completion
   ```
 
 * **`help`**: Display help about any command.
@@ -43,30 +100,60 @@ gobase [command]
   Example usage:
 
   ```bash
-  gobase help
+  goi help
   ```
 
-* **`new`**: Create a new Go project using a project template (based on the GoBase templates).
+* **`new`**: Create a new Go project using a project template (based on the `goi` templates).
 
   Example usage:
 
   ```bash
-  gobase new project-name
+  goi new project-name
   ```
 
-* **`version`**: Display the current version of GoBase.
+* **`version`**: Display the current version of `goi`.
 
   Example usage:
 
   ```bash
-  gobase version
+  goi version
   ```
 
 ---
 
-#### Project Structure
-```plaintext
+### **Build Commands for Cross-Compilation**
 
+To build the Go project for different platforms, you can use the following commands with cross-compilation options for **Linux**, **MacOS**, and **Windows**.
+
+#### **Build the Project for the Current Platform:**
+
+```bash
+go build -ldflags="-s -w" -trimpath -o goi .
+```
+
+#### **Examples for Cross-Compiling**:
+
+* **For Linux (amd64)**:
+
+  ```bash
+  GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o goi-linux .
+  ```
+
+* **For MacOS (arm64)**:
+
+  ```bash
+  GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o goi-osx .
+  ```
+
+* **For Windows (amd64)**:
+
+  ```bash
+  GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o goi.exe .
+  ```
+
+### **Project Structure**
+
+```plaintext
 myapp/
 ├── cmd/                                  # Main entry points for the app
 │   ├── api/                              # API server entry point
@@ -131,4 +218,10 @@ myapp/
 │   └── docker-compose.yml                # Docker-compose setup
 ├── go.mod                                # Go module dependencies
 └── go.sum                                # Go module checksum
+```
 
+---
+
+### **Conclusion**
+
+With these installation and uninstallation scripts, users can easily manage the `goi` tool on their systems. The process is simple, quick, and can be done entirely via the terminal. These scripts ensure that the installation and uninstallation are seamless and require minimal interaction from the user.

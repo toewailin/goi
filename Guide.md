@@ -1,31 +1,35 @@
-# **How to Create, Upload, and Install `gobase` Project**
-
-This guide will walk you through the steps to:
-
-1. **Create the `gobase` project.**
-2. **Build it as a binary file.**
-3. **Upload it to GitHub as a release.**
-4. **Install the binary on macOS and make it executable.**
-5. **Use the `gobase` command to download a Go project template.**
+Here’s the updated guide for **`goi`** replacing **`gobase`** in the installation, usage, and project creation process. The updated guide will walk you through how to create, upload, and install `goi` on your system, using the CLI commands to generate new Go projects.
 
 ---
 
-### **Step 1: Create the `gobase` Project**
+## **How to Create, Upload, and Install `goi` Project**
 
-The `gobase` CLI project allows you to easily set up a new Go project based on a predefined template from GitHub.
+This guide will walk you through the steps to:
+
+1. **Create the `goi` project.**
+2. **Build it as a binary file.**
+3. **Upload it to GitHub as a release.**
+4. **Install the binary on macOS and make it executable.**
+5. **Use the `goi` command to download a Go project template.**
+
+---
+
+### **Step 1: Create the `goi` Project**
+
+The `goi` CLI project allows you to easily set up a new Go project based on a predefined template from GitHub.
 
 1. **Initialize your Go project**:
 
    * Create a new directory for the project and initialize it.
 
    ```bash
-   mkdir gobase && cd gobase
-   go mod init github.com/toewailin/gobase
+   mkdir goi && cd goi
+   go mod init github.com/toewailin/goi
    ```
 
-2. **Write the `gobase` project code**:
+2. **Write the `goi` project code**:
 
-   * Below is a sample code for `gobase` that clones the Go template repository from GitHub and sets it up.
+   Below is a sample code for `goi` that clones the Go template repository from GitHub and sets it up.
 
    ```go
    package main
@@ -80,7 +84,7 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
    }
 
    func main() {
-       var rootCmd = &cobra.Command{Use: "gobase"}
+       var rootCmd = &cobra.Command{Use: "goi"}
 
        // Add the 'new' command to create a project
        rootCmd.AddCommand(createProjectCmd)
@@ -93,19 +97,17 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
    }
    ```
 
-3. **Build the `gobase` binary**:
+3. **Build the `goi` binary**:
 
-   * Compile the Go project into a binary.
+   Compile the Go project into a binary.
 
    ```bash
-    go build -o gobase-osx
-    GOOS=linux GOARCH=amd64 go build -o gobase-linux
-    GOOS=windows GOARCH=amd64 go build -o gobase.exe
-   
-
+   go build -o goi-osx
+   GOOS=linux GOARCH=amd64 go build -o goi-linux
+   GOOS=windows GOARCH=amd64 go build -o goi.exe
    ```
 
-   This will generate a binary file called `gobase` in the current directory.
+   This will generate a binary file called `goi` in the current directory.
 
 ---
 
@@ -113,14 +115,14 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
 
 1. **Create a GitHub repository**:
 
-   * Create a new GitHub repository (e.g., `gobase`).
+   * Create a new GitHub repository (e.g., `goi`).
 
 2. **Upload the binary as a release**:
 
    * Go to the **Releases** section of your repository on GitHub.
    * Click **Draft a new release**.
    * Tag the release (e.g., `v1.0.0`).
-   * Upload the `gobase` binary for your platform (e.g., `gobase-osx` for macOS).
+   * Upload the `goi` binary for your platform (e.g., `goi-osx` for macOS).
    * Click **Publish release**.
 
 ---
@@ -130,7 +132,7 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
 1. **Download the binary**:
 
    * Go to the **Releases** section of your GitHub repository.
-   * Download the appropriate binary for your operating system (e.g., `gobase-osx`).
+   * Download the appropriate binary for your operating system (e.g., `goi-osx`).
 
 2. **Make the binary executable**:
 
@@ -138,37 +140,37 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
    * Run the following command to make it executable:
 
    ```bash
-   chmod +x gobase-osx
+   chmod +x goi-osx
    ```
 
 3. **Move the binary to `/usr/local/bin`**:
 
-   * To make the `gobase` binary accessible globally, move it to `/usr/local/bin`.
+   * To make the `goi` binary accessible globally, move it to `/usr/local/bin`.
 
    ```bash
-   sudo mv gobase-osx /usr/local/bin/gobase
+   sudo mv goi-osx /usr/local/bin/goi
    ```
 
 4. **Verify the installation**:
 
-   * Run the following command to verify that `gobase` is installed correctly:
+   * Run the following command to verify that `goi` is installed correctly:
 
    ```bash
-   gobase --version
+   goi --version
    ```
 
-   This should return the version of `gobase`.
+   This should return the version of `goi`.
 
 ---
 
-### **Step 4: Use the `gobase` Command to Download a Go Project Template**
+### **Step 4: Use the `goi` Command to Download a Go Project Template**
 
 1. **Create a new Go project**:
 
-   * Use the `gobase` command to create a new Go project from the GitHub template:
+   * Use the `goi` command to create a new Go project from the GitHub template:
 
    ```bash
-   gobase new myproject
+   goi new myproject
    ```
 
    This will clone the Go project template from `https://github.com/toewailin/go-project` into the `myproject` directory.
@@ -191,6 +193,8 @@ The `gobase` CLI project allows you to easily set up a new Go project based on a
 
 ### **Conclusion**
 
-You’ve now created the `gobase` CLI tool that allows users to quickly set up a Go project based on a predefined template from GitHub. By following this guide, you can efficiently distribute and install the `gobase` binary on macOS, as well as create new projects using a simple command.
+You’ve now created the `goi` CLI tool that allows users to quickly set up a Go project based on a predefined template from GitHub. By following this guide, you can efficiently distribute and install the `goi` binary on macOS, as well as create new projects using a simple command.
 
 This setup can be extended to support more features such as customizing the project template, adding different project configurations, and more.
+
+Let me know if you need any further assistance or clarifications!

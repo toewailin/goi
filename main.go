@@ -11,7 +11,7 @@ import (
 )
 
 // Constants for the CLI tool version and GitHub project template URL.
-const CLI_VERSION = "0.2.0"
+const CLI_VERSION = "1.0.2"
 const GO_PROJECT_TEMPLATE_URL = "https://github.com/toewailin/go-project.git"
 
 // Check if Git is installed
