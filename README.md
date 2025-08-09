@@ -139,10 +139,16 @@ go build -ldflags="-s -w" -trimpath -o goi .
   GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o goi-linux .
   ```
 
+* **For MacOS (x86_64))**:
+
+  ```bash
+  GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o goi-osx .
+  ```
+
 * **For MacOS (arm64)**:
 
   ```bash
-  GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o goi-osx .
+  GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o goi-osx-m .
   ```
 
 * **For Windows (amd64)**:

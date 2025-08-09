@@ -1,4 +1,4 @@
-module gobase
+module goi
 
 go 1.24.5
 
