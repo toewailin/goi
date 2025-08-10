@@ -22,11 +22,14 @@ func main() {
 
 	// Add commands to the root command
 	rootCmd.AddCommand(commands.CreateProjectCmd)
+	rootCmd.AddCommand(commands.StartProjectCmd) 
 	rootCmd.AddCommand(commands.ListProjectCmd)
 	rootCmd.AddCommand(commands.RemoveProjectCmd)
 	rootCmd.AddCommand(commands.InstallDepsCmd)
 	rootCmd.AddCommand(commands.AddDepCmd)
 	rootCmd.AddCommand(commands.UpdateDepsCmd)
+	rootCmd.AddCommand(commands.BuildCmd)
+	rootCmd.AddCommand(commands.UninstallCmd)
 	rootCmd.AddCommand(commands.VersionCmd)
 
 	// Execute the root command

@@ -15,3 +15,4 @@ func CheckGoInstalled() bool {
 	_, err := exec.LookPath("go")
 	return err == nil
 }
+

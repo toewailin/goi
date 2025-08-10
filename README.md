@@ -1,4 +1,4 @@
-### **goi**
+## **goi**
 
 ### **Introduction**
 
@@ -128,34 +128,9 @@ To build the Go project for different platforms, you can use the following comma
 #### **Build the Project for the Current Platform:**
 
 ```bash
-go build -ldflags="-s -w" -trimpath -o goi .
+  chmod +x build.sh
+  ./build.sh
 ```
-
-#### **Examples for Cross-Compiling**:
-
-* **For Linux (amd64)**:
-
-  ```bash
-  GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o goi-linux .
-  ```
-
-* **For MacOS (x86_64))**:
-
-  ```bash
-  GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o goi-osx .
-  ```
-
-* **For MacOS (arm64)**:
-
-  ```bash
-  GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o goi-osx-m .
-  ```
-
-* **For Windows (amd64)**:
-
-  ```bash
-  GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o goi.exe .
-  ```
 
 ### **Project Structure**
 
