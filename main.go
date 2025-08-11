@@ -30,6 +30,7 @@ func main() {
 	rootCmd.AddCommand(commands.SyncCmd)
 	rootCmd.AddCommand(commands.BuildCmd)
 	rootCmd.AddCommand(commands.CleanCmd)
+	rootCmd.AddCommand(commands.InstallCmd)
 	rootCmd.AddCommand(commands.UninstallCmd)
 	rootCmd.AddCommand(commands.UpgradeCmd)
 	rootCmd.AddCommand(commands.VersionCmd)

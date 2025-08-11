@@ -5,7 +5,6 @@ import (
 	"goi/utils"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"runtime"
 
 	"github.com/spf13/cobra"
@@ -25,7 +24,6 @@ func runBuildCommand(cmd *cobra.Command, args []string) error {
 	}
 
 	// Default output name for the binary (for the current machine)
-	// outputName := "goi" // Default name for the output binary
 	platforms := []string{} // Initialize an empty slice
 
 	// Parse flags for specific platforms
@@ -104,45 +102,6 @@ func runBuildCommand(cmd *cobra.Command, args []string) error {
 
 		// Output success message using the utils
 		utils.PrintSuccess(fmt.Sprintf("Successfully built Go project for %s and saved to build/%s", platform, platformOutputName))
-
-		// If the --install flag is provided, move the binary to the correct directory
-		installFlag, _ := cmd.Flags().GetBool("install")
-		if installFlag {
-			if err := moveBinaryToLocalBin(platformOutputName); err != nil {
-				return err
-			}
-			utils.PrintSuccess("The binary has been moved to the appropriate directory")
-		}
-	}
-
-	return nil
-}
-
-// Function to move the built binary to the correct directory based on the OS
-func moveBinaryToLocalBin(binaryName string) error {
-	// Check the current operating system
-	switch runtime.GOOS {
-	case "linux", "darwin":
-		// For macOS and Linux, move the binary to /usr/local/bin
-		destinationPath := "/usr/local/bin/goi"
-		if err := os.Rename(filepath.Join("build", binaryName), destinationPath); err != nil {
-			return fmt.Errorf("failed to move binary to /usr/local/bin: %w", err)
-		}
-
-		// Ensure the binary is executable
-		if err := os.Chmod(destinationPath, 0755); err != nil {
-			return fmt.Errorf("failed to make the binary executable: %w", err)
-		}
-	case "windows":
-		// For Windows, move the binary to C:\Program Files\goi
-		destinationPath := "C:\\Program Files\\goi\\goi.exe"
-		if err := os.Rename(filepath.Join("build", binaryName), destinationPath); err != nil {
-			return fmt.Errorf("failed to move binary to C:\\Program Files\\goi: %w", err)
-		}
-		// Optionally, update system PATH on Windows to include this directory (requires admin privileges)
-		// Add your own logic here to update system PATH if necessary
-	default:
-		return fmt.Errorf("unsupported operating system %s", runtime.GOOS)
 	}
 
 	return nil
@@ -155,5 +114,4 @@ func init() {
 	BuildCmd.Flags().BoolP("linux", "l", false, "Build for Linux")
 	BuildCmd.Flags().BoolP("mac", "m", false, "Build for macOS")
 	BuildCmd.Flags().BoolP("windows", "w", false, "Build for Windows")
-	BuildCmd.Flags().BoolP("install", "i", false, "Move the binary to /usr/local/bin after build")
 }
