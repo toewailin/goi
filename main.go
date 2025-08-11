@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"goi/commands"
 
@@ -22,15 +23,30 @@ func main() {
 
 	// Add commands to the root command
 	rootCmd.AddCommand(commands.CreateProjectCmd)
-	rootCmd.AddCommand(commands.StartProjectCmd) 
+	rootCmd.AddCommand(commands.InitCmd)
+	rootCmd.AddCommand(commands.ServeProjectCmd) 
 	rootCmd.AddCommand(commands.ListProjectCmd)
 	rootCmd.AddCommand(commands.RemoveProjectCmd)
 	rootCmd.AddCommand(commands.InstallDepsCmd)
 	rootCmd.AddCommand(commands.AddDepCmd)
-	rootCmd.AddCommand(commands.UpdateDepsCmd)
+	rootCmd.AddCommand(commands.SyncCmd)
 	rootCmd.AddCommand(commands.BuildCmd)
+	rootCmd.AddCommand(commands.CleanCmd)
 	rootCmd.AddCommand(commands.UninstallCmd)
+	rootCmd.AddCommand(commands.UpgradeCmd)
 	rootCmd.AddCommand(commands.VersionCmd)
+	rootCmd.AddCommand(commands.HistoryCmd)
+	rootCmd.AddCommand(commands.TreeCmd)
+
+// Hook into the 'Run' function of each command to save executed commands to history
+	cobra.OnInitialize(func() {
+		// Capture the current command name and arguments
+		rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+			// Combine the command name and its arguments
+			executedCommand := fmt.Sprintf("%s %s", cmd.Use, strings.Join(args, " "))
+			commands.SaveToHistory(executedCommand)
+		}
+	})
 
 	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {
