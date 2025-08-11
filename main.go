@@ -29,6 +29,7 @@ func main() {
 	rootCmd.AddCommand(commands.ServeProjectCmd)
 	rootCmd.AddCommand(commands.SyncCmd)
 	rootCmd.AddCommand(commands.BuildCmd)
+	rootCmd.AddCommand(commands.DeployCmd)
 	rootCmd.AddCommand(commands.CleanCmd)
 	rootCmd.AddCommand(commands.InstallCmd)
 	rootCmd.AddCommand(commands.UninstallCmd)
