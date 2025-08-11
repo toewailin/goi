@@ -10,7 +10,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const CLI_VERSION = "1.0.2"
+const (
+	CLI_VERSION               = "1.0.2"
+	GO_PROJECT_TEMPLATE_URL = "https://github.com/toewailin/go-project.git"
+)
 
 // Main entry point of the application
 func main() {
@@ -23,12 +26,7 @@ func main() {
 
 	// Add commands to the root command
 	rootCmd.AddCommand(commands.CreateProjectCmd)
-	rootCmd.AddCommand(commands.InitCmd)
-	rootCmd.AddCommand(commands.ServeProjectCmd) 
-	rootCmd.AddCommand(commands.ListProjectCmd)
-	rootCmd.AddCommand(commands.RemoveProjectCmd)
-	rootCmd.AddCommand(commands.InstallDepsCmd)
-	rootCmd.AddCommand(commands.AddDepCmd)
+	rootCmd.AddCommand(commands.ServeProjectCmd)
 	rootCmd.AddCommand(commands.SyncCmd)
 	rootCmd.AddCommand(commands.BuildCmd)
 	rootCmd.AddCommand(commands.CleanCmd)
