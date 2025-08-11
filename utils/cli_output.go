@@ -30,6 +30,11 @@ func PrintSuccess(message string) {
 	fmt.Println(colorize("0;32", "SUCCESS: "+message))
 }
 
+// PrintWarning prints a warning message in yellow
+func PrintWarning(message string) {
+	fmt.Fprintln(os.Stderr, colorize("0;33", "WARNING: "+message))
+}
+
 // PrintError prints an error message in red and exits the program
 func PrintError(message string) {
 	fmt.Fprintln(os.Stderr, colorize("0;31", "ERROR: "+message))

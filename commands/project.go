@@ -74,18 +74,17 @@ var CreateProjectCmd = &cobra.Command{
 
 		// Final Success Message
 		utils.PrintSuccess("🎉 Your Go project has been created successfully!")
+
 		utils.PrintInfo("🚀 To get started, follow these simple steps:")
 
 		utils.PrintInfo("  1. Navigate to your project folder:")
 		utils.PrintInfo("     cd " + projectName)
 
-		utils.PrintInfo("  2. Install the dependencies and clean up the Go module:")
-		utils.PrintInfo("     goi install  # Runs 'go mod tidy'")
+		utils.PrintInfo("  2. Install and update dependencies.")
+		utils.PrintInfo("     goi sync  # Runs 'go mod tidy'")
 
 		utils.PrintInfo("  3. Start your Go project:")
 		utils.PrintInfo("     goi serve    # This will run 'go run cmd/api/main.go'")
-
-		utils.PrintInfo("\n🚀 Your API server will now be live at http://localhost:9090")
 
 		return nil
 	},
@@ -100,15 +99,25 @@ func cloneRepo(projectName string) error {
 	cmd.Stdout = os.Stdout  // Display standard output (git clone details)
 	cmd.Stderr = os.Stderr  // Display standard error output (git clone errors)
 
-	utils.PrintInfo("Cloning project template...") // Print info message
-
 	// Run the command and check for errors
 	if err := cmd.Run(); err != nil {
 		utils.PrintError(fmt.Sprintf("Failed to clone repository: %v", err))
 		return fmt.Errorf("failed to clone repository: %w", err)
 	}
 
-	utils.PrintSuccess("Project cloned successfully!")
+	// Remove the .git directory to make it a fresh project
+	gitDir := filepath.Join(projectName, ".git")
+	if _, err := os.Stat(gitDir); err == nil {
+		if err := os.RemoveAll(gitDir); err != nil {
+			// Print warning if unable to remove the .git directory
+			utils.PrintWarning(fmt.Sprintf("WARNING: Failed to remove .git directory: %v", err))
+		} else {
+			utils.PrintSuccess("Removed .git directory.")
+		}
+	} else {
+		utils.PrintInfo("No .git directory found.")
+	}
+
 	return nil
 }
 
@@ -150,7 +159,6 @@ func updateGoMod(projectName string) error {
 
 // Update import paths in Go files to reflect the project name
 func updateImportPaths(projectName string) error {
-	utils.PrintInfo("Updating import paths in Go files...")
 
 	err := filepath.Walk(projectName, func(path string, info os.FileInfo, err error) error {
 		if err != nil {

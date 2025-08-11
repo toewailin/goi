@@ -14,13 +14,6 @@ goi build should be for project, and goi serve (start)
 * **Usage**: `goi test [package]`
 * **Example**: `goi test ./...` – Runs tests in the entire project.
 
-### 6. **`deploy`** – Deploy the Go project to a server or cloud service
-
-* **Description**: A command to deploy the Go project to platforms like AWS, Heroku, or custom servers.
-* **Usage**: `goi deploy <platform>`
-* **Example**: `goi deploy heroku` – Deploys the project to Heroku.
-
-
 ### **Possible Features for `goi make`**
 
 1. **Create Custom Scaffolds (e.g., controllers, models, services)**

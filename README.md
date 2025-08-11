@@ -149,21 +149,18 @@ myapp/
 │   ├── redis_config.go                   # Redis connection and config (pub/sub)
 │   ├── environment.go                    # Environment-specific settings (dev, prod)
 │   └── .env                              # Environment variables
-├── scaffolding/                          # Scaffolding files and templates
-│   ├── controller_template.go            # Template for generating controllers
-│   ├── model_template.go                 # Template for generating models
-│   ├── migration_template.go             # Template for generating migrations
-│   ├── factory_template.go               # Template for generating factories
-│   └── route_template.go                 # Template for generating routes
 ├── handler/                              # HTTP handlers (controllers)
 │   ├── adminHandler.go                   # Admin logic (system health, user management)
+│   └── userHandler.go                    # User logic (authentication, user data)
 ├── models/                               # GORM models (database entities)
 │   ├── user.go                           # User model (all roles)
 ├── repository/                           # Database interaction layer
 │   ├── userRepo.go                       # CRUD for users
+│   └── roleRepo.go                       # CRUD for roles (example)
 ├── services/                             # Core business logic
 │   ├── authService.go                    # Authentication logic (JWT, sessions)
-│   └── cronService.go                    # Cron job or background task logic
+│   ├── cronService.go                    # Cron job or background task logic
+│   └── userService.go                    # User service logic (interacts with userRepo)
 ├── routes/                               # Route definitions
 │   ├── adminRoutes.go                    # Admin-related routes
 │   └── gameRoutes.go                     # Game-related routes
@@ -180,12 +177,16 @@ myapp/
 │   ├── validation.go                     # Input validation
 │   ├── pagination.go                     # Pagination helper
 │   ├── i18n.go                           # Translations (i18n helpers)
+│   └── error.go                          # Error utilities for handling custom errors
+├── dto/                                  # Data Transfer Objects (DTOs)
+│   ├── userDTO.go                        # User DTO (for API responses and requests)
+│   ├── roleDTO.go                        # Role DTO (for API responses and requests)
 ├── locales/                              # Translation files
 │   ├── en.json                           # English translations
 │   ├── my.json                           # Myanmar translations
 ├── tests/                                # Unit and integration tests
-│   ├── controllers/
-│   │   └── adminController_test.go
+│   ├── handlers/
+│   │   └── adminHandler_test.go
 │   ├── services/
 │   │   └── authService_test.go
 │   └── repositories/
@@ -199,7 +200,6 @@ myapp/
 │   └── docker-compose.yml                # Docker-compose setup
 ├── go.mod                                # Go module dependencies
 └── go.sum                                # Go module checksum
-```
 
 ---
 
