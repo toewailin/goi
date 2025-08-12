@@ -1,46 +1,53 @@
 package commands
 
 import (
-	"fmt"           // Assuming you have a utils package for printing success/error messages
-	"goi/templates" // Import the templates package
+	"fmt"
+	"goi/templates"
+	"goi/utils"
 	"os"
 	"strings"
 	"text/template"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // MakeCmd represents the 'make' command
 var MakeCmd = &cobra.Command{
 	Use:   "make",
-	Short: "Generate custom scaffolds for Go projects (e.g., models, controllers)",
+	Short: "Generate custom scaffolds for Go projects, goi make <type> <name>",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("subcommand is required. Example: goi make controller <name>")
 	},
+}
+
+// Initialize the "make" subcommands
+func init() {
+	MakeCmd.AddCommand(MakeHandlerCmd)
+	MakeCmd.AddCommand(MakeModelCmd)
+	MakeCmd.AddCommand(MakeServiceCmd)
+	MakeCmd.AddCommand(MakeRepositoryCmd)
+	MakeCmd.AddCommand(MakeResponseCmd)
 }
 
 // MakeHandlerCmd generates a new handler file
 var MakeHandlerCmd = &cobra.Command{
 	Use:   "handler <name>",
 	Short: "Generate a new handler",
-	Args:  cobra.ExactArgs(1), // We expect exactly one argument: the name of the handler
-	RunE:  generateHandler,
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return generateFile(args[0], "handler")
+	},
 }
 
 // MakeModelCmd generates a new model file
 var MakeModelCmd = &cobra.Command{
 	Use:   "model <name>",
 	Short: "Generate a new model",
-	Args:  cobra.ExactArgs(1), // We expect exactly one argument: the name of the model
-	RunE:  generateModel,
-}
-
-// ServiceCmd represents the 'make service' command
-var ServiceCmd = &cobra.Command{
-	Use:   "service",
-	Short: "Generate a new service for handling business logic",
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return fmt.Errorf("subcommand is required. Example: goi make service <name>")
+		return generateFile(args[0], "model")
 	},
 }
 
@@ -48,16 +55,9 @@ var ServiceCmd = &cobra.Command{
 var MakeServiceCmd = &cobra.Command{
 	Use:   "service <name>",
 	Short: "Generate a new service",
-	Args:  cobra.ExactArgs(1), // We expect exactly one argument: the service name (e.g., User)
-	RunE:  generateService,
-}
-
-// RepositoryCmd represents the 'make repository' command
-var RepositoryCmd = &cobra.Command{
-	Use:   "repository",
-	Short: "Generate a new repository for database interactions",
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return fmt.Errorf("subcommand is required. Example: goi make repository <name>")
+		return generateFile(args[0], "service")
 	},
 }
 
@@ -65,130 +65,143 @@ var RepositoryCmd = &cobra.Command{
 var MakeRepositoryCmd = &cobra.Command{
 	Use:   "repo <name>",
 	Short: "Generate a new repository",
-	Args:  cobra.ExactArgs(1), // We expect exactly one argument: the repository name
-	RunE:  generateRepository,
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return generateFile(args[0], "repository")
+	},
 }
 
-// Initialize flags for the MakeCmd
-func init() {
-	// Add the make command and its subcommands
-	MakeCmd.AddCommand(MakeHandlerCmd)
-	MakeCmd.AddCommand(MakeModelCmd)
-	MakeCmd.AddCommand(MakeServiceCmd)
-	MakeCmd.AddCommand(MakeRepositoryCmd)
+// MakeResponseCmd generates response files (success, error, pagination)
+var MakeResponseCmd = &cobra.Command{
+	Use:   "response",
+	Short: "Generate response files (SuccessResponse, ErrorResponse, PaginationResponse)",
+	RunE:  generateResponse,
 }
 
-// generateHandler creates a new handler file based on the name provided
-func generateHandler(cmd *cobra.Command, args []string) error {
-	handlerName := args[0]
-
-	// Ensure the handlers directory exists
-	if err := ensureDirectoryExists("handlers"); err != nil {
+// generateFile creates files based on the provided resource type and name
+func generateFile(resourceName, resourceType string) error {
+	// Ensure the directory exists for the resource type
+	dir := getDirectoryForResource(resourceType)
+	if err := ensureDirectoryExists(dir); err != nil {
 		return err
 	}
 
-	// Parse the handler template
-	tmpl, err := template.New("handler").Parse(templates.HandlerTemplate)
+	// Get the module name dynamically from the go.mod file
+	moduleName, err := getModuleNameFromGoMod(".") // Assuming the go.mod is in the current directory
 	if err != nil {
-		return fmt.Errorf("failed to parse handler template: %w", err)
+		return fmt.Errorf("failed to get module name from go.mod: %w", err)
 	}
 
-	// Create the handler file
-	fileName := fmt.Sprintf("handlers/%s_handler.go", strings.ToLower(handlerName))
+	// Parse the appropriate template
+	tmpl, err := parseTemplateForResource(resourceType)
+	if err != nil {
+		return err
+	}
+
+	// Create the file
+	fileName := fmt.Sprintf("%s/%s_%s.go", dir, strings.ToLower(resourceName), strings.ToLower(resourceType))
 	file, err := os.Create(fileName)
 	if err != nil {
-		return fmt.Errorf("failed to create handler file: %w", err)
+		return fmt.Errorf("failed to create %s file: %w", resourceType, err)
 	}
 	defer file.Close()
 
-	// Generate the handler content from the template
-	err = tmpl.Execute(file, map[string]string{"HandlerName": handlerName})
-	if err != nil {
-		return fmt.Errorf("failed to write to handler file: %w", err)
-	}
+	// Capitalize the resourceType using cases.Title (proper Unicode handling)
+	titleCase := cases.Title(language.Und, cases.Compact).String(resourceType)
 
-	fmt.Printf("Handler %s created successfully\n", handlerName)
-	return nil
-}
-
-// generateModel creates a new model file based on the name provided
-func generateModel(cmd *cobra.Command, args []string) error {
-	modelName := args[0]
-
-	// Ensure the models directory exists
-	if err := ensureDirectoryExists("models"); err != nil {
-		return err
-	}
-
-	// Parse the model template
-	tmpl, err := template.New("model").Parse(templates.ModelTemplate)
-	if err != nil {
-		return fmt.Errorf("failed to parse model template: %w", err)
-	}
-
-	// Create the model file
-	fileName := fmt.Sprintf("models/%s.go", strings.ToLower(modelName))
-	file, err := os.Create(fileName)
-	if err != nil {
-		return fmt.Errorf("failed to create model file: %w", err)
-	}
-	defer file.Close()
-
-	// Generate the model content from the template
-	err = tmpl.Execute(file, map[string]string{"ModelName": modelName})
-	if err != nil {
-		return fmt.Errorf("failed to write to model file: %w", err)
-	}
-
-	fmt.Printf("Model %s created successfully\n", modelName)
-	return nil
-}
-
-// generateService creates a new service file based on the name provided
-func generateService(cmd *cobra.Command, args []string) error {
-	serviceName := args[0]
-
-	// Get the current working directory (the current project folder)
-	projectPath, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("failed to get current directory: %w", err)
-	}
-
-	// Get the module name from the current project's go.mod
-	moduleName, err := getModuleNameFromGoMod(projectPath)
-	if err != nil {
-		return err
-	}
-
-	// Ensure the service directory exists
-	if err := ensureDirectoryExists("service"); err != nil {
-		return err
-	}
-
-	// Parse the service template
-	tmpl, err := template.New("service").Parse(templates.ServiceTemplate)
-	if err != nil {
-		return fmt.Errorf("failed to parse service template: %w", err)
-	}
-
-	// Create the service file
-	fileName := fmt.Sprintf("service/%s_service.go", strings.ToLower(serviceName))
-	file, err := os.Create(fileName)
-	if err != nil {
-		return fmt.Errorf("failed to create service file: %w", err)
-	}
-	defer file.Close()
-
-	// Generate the service content from the template
+	// Generate content from the template, passing the ModuleName along with the resource name
 	err = tmpl.Execute(file, map[string]string{
-		"ServiceName": serviceName,
-		"ModuleName":  moduleName,  // Pass the dynamically fetched module name
+		titleCase:      resourceName,
+		"ModuleName":   moduleName,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to write to service file: %w", err)
+		return fmt.Errorf("failed to write to %s file: %w", resourceType, err)
 	}
 
-	fmt.Printf("Service %s created successfully\n", serviceName)
+	utils.PrintSuccess(fmt.Sprintf("%s '%s' created successfully", titleCase, resourceName))
+	return nil
+}
+
+// parseTemplateForResource selects the appropriate template for the resource type
+func parseTemplateForResource(resourceType string) (*template.Template, error) {
+	var tmplContent string
+
+	// Choose the correct template based on resourceType
+	switch resourceType {
+	case "handler":
+		tmplContent = templates.HandlerTemplate
+	case "model":
+		tmplContent = templates.ModelTemplate
+	case "service":
+		tmplContent = templates.ServiceTemplate
+	case "repository":
+		tmplContent = templates.RepositoryTemplate
+	default:
+		return nil, fmt.Errorf("unknown resource type: %s", resourceType)
+	}
+
+	// Parse and return the template
+	return template.New(resourceType).Parse(tmplContent)
+}
+
+// getDirectoryForResource returns the correct directory based on the resource type
+func getDirectoryForResource(resourceType string) string {
+	switch resourceType {
+	case "handler":
+		return "handlers"
+	case "model":
+		return "models"
+	case "service":
+		return "services"
+	case "repository":
+		return "repository"
+	default:
+		return ""
+	}
+}
+
+// generateResponse creates response files based on templates
+func generateResponse(cmd *cobra.Command, args []string) error {
+	responseFiles := map[string]string{
+		"success_response.go":       templates.SuccessResponseTemplate,       // Already exists (SuccessResponse)
+		"error_response.go":         templates.ErrorResponseTemplate,         // Already exists (ErrorResponse)
+		"pagination_response.go":    templates.PaginationResponseTemplate,    // Already exists (Pagination)
+	}
+
+	if err := ensureDirectoryExists("response"); err != nil {
+		return err
+	}
+
+	for fileName, tmplContent := range responseFiles {
+		tmpl, err := template.New(fileName).Parse(tmplContent)
+		if err != nil {
+			return fmt.Errorf("failed to parse response template %s: %w", fileName, err)
+		}
+
+		filePath := fmt.Sprintf("response/%s", fileName)
+		file, err := os.Create(filePath)
+		if err != nil {
+			return fmt.Errorf("failed to create response file %s: %w", filePath, err)
+		}
+		defer file.Close()
+
+		if err := tmpl.Execute(file, nil); err != nil {
+			return fmt.Errorf("failed to write to response file %s: %w", filePath, err)
+		}
+
+		fmt.Printf("Response file '%s' created successfully\n", fileName)
+	}
+
+	return nil
+}
+
+// ensureDirectoryExists checks if the directory exists, and creates it if it doesn't
+func ensureDirectoryExists(dir string) error {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return fmt.Errorf("failed to create directory %s: %w", dir, err)
+		}
+	}
 	return nil
 }
 
@@ -213,49 +226,4 @@ func getModuleNameFromGoMod(projectPath string) (string, error) {
 	}
 
 	return "", fmt.Errorf("module name not found in go.mod")
-}
-
-// generateRepository creates a new repository file based on the name provided
-func generateRepository(cmd *cobra.Command, args []string) error {
-	repoName := args[0]
-
-	// Ensure the repository directory exists
-	if err := ensureDirectoryExists("repository"); err != nil {
-		return err
-	}
-
-	// Parse the repository template
-	tmpl, err := template.New("repository").Parse(templates.RepositoryTemplate)
-	if err != nil {
-		return fmt.Errorf("failed to parse repository template: %w", err)
-	}
-
-	// Create the repository file
-	fileName := fmt.Sprintf("repository/%s_repo.go", strings.ToLower(repoName))
-	file, err := os.Create(fileName)
-	if err != nil {
-		return fmt.Errorf("failed to create repository file: %w", err)
-	}
-	defer file.Close()
-
-	// Generate the repository content from the template
-	err = tmpl.Execute(file, map[string]string{"RepoName": repoName})
-	if err != nil {
-		return fmt.Errorf("failed to write to repository file: %w", err)
-	}
-
-	fmt.Printf("Repository %s created successfully\n", repoName)
-	return nil
-}
-
-// ensureDirectoryExists checks if the directory exists, and creates it if it doesn't
-func ensureDirectoryExists(dir string) error {
-	// Check if the directory exists
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		// If it doesn't exist, create the directory
-		if err := os.MkdirAll(dir, 0755); err != nil {
-			return fmt.Errorf("failed to create directory %s: %w", dir, err)
-		}
-	}
-	return nil
 }

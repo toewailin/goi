@@ -5,6 +5,7 @@ go 1.24.5
 require (
 	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.9.1
+	golang.org/x/text v0.28.0
 )
 
 require (
