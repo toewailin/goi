@@ -26,12 +26,15 @@ func main() {
 
 	// Add commands to the root command
 	rootCmd.AddCommand(commands.CreateProjectCmd)
+	rootCmd.AddCommand(commands.GenerateKeysCmd)
 	rootCmd.AddCommand(commands.ServeProjectCmd)
 	rootCmd.AddCommand(commands.SyncCmd)
 	rootCmd.AddCommand(commands.BuildCmd)
 	rootCmd.AddCommand(commands.DeployCmd)
 	rootCmd.AddCommand(commands.CleanCmd)
 	rootCmd.AddCommand(commands.MakeCmd)
+	rootCmd.AddCommand(commands.MySQLBackupCmd)
+	rootCmd.AddCommand(commands.MySQLRestoreCmd)
 	rootCmd.AddCommand(commands.InstallCmd)
 	rootCmd.AddCommand(commands.UninstallCmd)
 	rootCmd.AddCommand(commands.UpgradeCmd)
