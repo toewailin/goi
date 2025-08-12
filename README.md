@@ -150,27 +150,27 @@ myapp/
 │   ├── environment.go                    # Environment-specific settings (dev, prod)
 │   └── .env                              # Environment variables
 ├── handler/                              # HTTP handlers (controllers)
-│   ├── adminHandler.go                   # Admin logic (system health, user management)
-│   └── userHandler.go                    # User logic (authentication, user data)
+│   ├── admin_handler.go                   # Admin logic (system health, user management)
+│   └── user_handler.go                    # User logic (authentication, user data)
 ├── models/                               # GORM models (database entities)
-│   ├── user.go                           # User model (all roles)
+│   ├── user_model.go                      # User model (all roles)
 ├── repository/                           # Database interaction layer
-│   ├── userRepo.go                       # CRUD for users
-│   └── roleRepo.go                       # CRUD for roles (example)
+│   ├── user_repo.go                       # CRUD for users
+│   └── role_repo.go                       # CRUD for roles (example)
 ├── services/                             # Core business logic
-│   ├── authService.go                    # Authentication logic (JWT, sessions)
-│   ├── cronService.go                    # Cron job or background task logic
-│   └── userService.go                    # User service logic (interacts with userRepo)
+│   ├── auth_service.go                    # Authentication logic (JWT, sessions)
+│   ├── cron_service.go                    # Cron job or background task logic
+│   └── user_service.go                    # User service logic (interacts with userRepo)
 ├── routes/                               # Route definitions
-│   ├── adminRoutes.go                    # Admin-related routes
-│   └── gameRoutes.go                     # Game-related routes
+│   ├── admin_routes.go                    # Admin-related routes
+│   └── game_routes.go                     # Game-related routes
 ├── middlewares/                          # Middleware
-│   ├── authMiddleware.go                 # JWT authentication
-│   ├── loggingMiddleware.go              # Logging requests/responses
-│   ├── rateLimitMiddleware.go            # Rate-limiting
-│   ├── roleMiddleware.go                 # Role-based access control
-│   ├── errorHandlingMiddleware.go        # Centralized error handler
-│   ├── corsMiddleware.go                 # CORS handling
+│   ├── auth_middleware.go                 # JWT authentication
+│   ├── logging_middleware.go              # Logging requests/responses
+│   ├── rate_limit_middleware.go            # Rate-limiting
+│   ├── role_middleware.go                 # Role-based access control
+│   ├── error_handling_middleware.go        # Centralized error handler
+│   ├── cors_middleware.go                 # CORS handling
 ├── utils/                                # Utility functions
 │   ├── jwt.go                            # JWT helpers
 │   ├── logger.go                         # Logger
@@ -178,19 +178,16 @@ myapp/
 │   ├── pagination.go                     # Pagination helper
 │   ├── i18n.go                           # Translations (i18n helpers)
 │   └── error.go                          # Error utilities for handling custom errors
+├── response/                             # Response utility files
+│   ├── success_response.go               # Success response utility
+│   ├── error_response.go                 # Error response utility
+│   └── pagination_response.go            # Pagination response utility
 ├── dto/                                  # Data Transfer Objects (DTOs)
-│   ├── userDTO.go                        # User DTO (for API responses and requests)
-│   ├── roleDTO.go                        # Role DTO (for API responses and requests)
+│   ├── user_dto_.go                        # User DTO (for API responses and requests)
+│   ├── role_dto.go                        # Role DTO (for API responses and requests)
 ├── locales/                              # Translation files
 │   ├── en.json                           # English translations
 │   ├── my.json                           # Myanmar translations
-├── tests/                                # Unit and integration tests
-│   ├── handlers/
-│   │   └── adminHandler_test.go
-│   ├── services/
-│   │   └── authService_test.go
-│   └── repositories/
-│       └── userRepository_test.go
 ├── scripts/                              # Database migrations and scripts
 │   ├── genkeys.sh                        # Generate PEM keys
 │   └── upload.sh                         # Upload script
@@ -200,9 +197,3 @@ myapp/
 │   └── docker-compose.yml                # Docker-compose setup
 ├── go.mod                                # Go module dependencies
 └── go.sum                                # Go module checksum
-
----
-
-### **Conclusion**
-
-With these installation and uninstallation scripts, users can easily manage the `goi` tool on their systems. The process is simple, quick, and can be done entirely via the terminal. These scripts ensure that the installation and uninstallation are seamless and require minimal interaction from the user.

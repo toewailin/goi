@@ -7,7 +7,11 @@ import "gorm.io/gorm"
 
 // {{.ModelName}} represents the {{.ModelName}} model in the database
 type {{.ModelName}} struct {
-	gorm.Model
-	// Define fields here
+    gorm.Model
+    Name        string ` + "`" + `json:"name"` + "`" + `
+    Description string ` + "`" + `json:"description,omitempty"` + "`" + `
+    IsActive    bool   ` + "`" + `json:"is_active"` + "`" + `
+    Count       int    ` + "`" + `json:"count"` + "`" + `
+    // Define fields here
 }
 `

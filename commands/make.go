@@ -25,10 +25,12 @@ var MakeCmd = &cobra.Command{
 // Initialize the "make" subcommands
 func init() {
 	MakeCmd.AddCommand(MakeHandlerCmd)
+	MakeCmd.AddCommand(MakeDTOCmd)
 	MakeCmd.AddCommand(MakeModelCmd)
 	MakeCmd.AddCommand(MakeServiceCmd)
 	MakeCmd.AddCommand(MakeRepositoryCmd)
 	MakeCmd.AddCommand(MakeResponseCmd)
+	MakeCmd.AddCommand(MakeResourceCmd)
 }
 
 // MakeHandlerCmd generates a new handler file
@@ -40,6 +42,17 @@ var MakeHandlerCmd = &cobra.Command{
 		return generateFile(args[0], "handler")
 	},
 }
+
+// MakeDTOCmd generates a new dto file
+var MakeDTOCmd = &cobra.Command{
+	Use:   "dto <name>",
+	Short: "Generate a new dto",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return generateFile(args[0], "dto")
+	},
+}
+
 
 // MakeModelCmd generates a new model file
 var MakeModelCmd = &cobra.Command{
@@ -63,7 +76,7 @@ var MakeServiceCmd = &cobra.Command{
 
 // MakeRepositoryCmd generates a new repository file
 var MakeRepositoryCmd = &cobra.Command{
-	Use:   "repo <name>",
+	Use:   "repository <name>",
 	Short: "Generate a new repository",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -76,6 +89,48 @@ var MakeResponseCmd = &cobra.Command{
 	Use:   "response",
 	Short: "Generate response files (SuccessResponse, ErrorResponse, PaginationResponse)",
 	RunE:  generateResponse,
+}
+
+// MakeResourceCmd generates a new resource (handler, dto, model, service, repository)
+var MakeResourceCmd = &cobra.Command{
+	Use:   "resource <name>",
+	Short: "Generate a new resource with handler, dto, model, service, and repository",
+	Args:  cobra.ExactArgs(1), // We expect exactly one argument: the name of the resource
+	RunE:  generateResource,
+}
+
+// generateResource creates all files for a resource (handler, dto, model, service, repository)
+func generateResource(cmd *cobra.Command, args []string) error {
+	resourceName := args[0]
+
+	// Create handler file
+	if err := generateFile(resourceName, "handler"); err != nil {
+		return err
+	}
+
+	// Create dto file
+	if err := generateFile(resourceName, "dto"); err != nil {
+		return err
+	}
+
+	// Create model file
+	if err := generateFile(resourceName, "model"); err != nil {
+		return err
+	}
+
+	// Create service file
+	if err := generateFile(resourceName, "service"); err != nil {
+		return err
+	}
+
+	// Create repository file
+	if err := generateFile(resourceName, "repository"); err != nil {
+		return err
+	}
+
+	// Success message
+	utils.PrintSuccess(fmt.Sprintf("Resource '%s' generated successfully!", resourceName))
+	return nil
 }
 
 // generateFile creates files based on the provided resource type and name
@@ -111,7 +166,7 @@ func generateFile(resourceName, resourceType string) error {
 
 	// Generate content from the template, passing the ModuleName along with the resource name
 	err = tmpl.Execute(file, map[string]string{
-		titleCase:      resourceName,
+		titleCase + "Name":      resourceName,
 		"ModuleName":   moduleName,
 	})
 	if err != nil {
@@ -130,6 +185,8 @@ func parseTemplateForResource(resourceType string) (*template.Template, error) {
 	switch resourceType {
 	case "handler":
 		tmplContent = templates.HandlerTemplate
+	case "dto":
+		tmplContent = templates.DTOTemplate
 	case "model":
 		tmplContent = templates.ModelTemplate
 	case "service":
@@ -149,6 +206,8 @@ func getDirectoryForResource(resourceType string) string {
 	switch resourceType {
 	case "handler":
 		return "handlers"
+	case "dto":
+		return "dto"
 	case "model":
 		return "models"
 	case "service":

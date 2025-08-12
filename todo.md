@@ -14,15 +14,6 @@ goi build should be for project, and goi serve (start)
 * **Usage**: `goi test [package]`
 * **Example**: `goi test ./...` – Runs tests in the entire project.
 
-### **Possible Features for `goi make`**
-
-1. **Create Custom Scaffolds (e.g., controllers, models, services)**
-
-   * **Description**: Use `goi make` to generate various Go components based on user input or predefined templates. This can include common structures like controllers, models, routes, or services.
-   * **Usage**: `goi make controller <name>`
-   * **Example**: `goi make model User` – Generates a new `User` model file with boilerplate code.
-   * **Benefit**: Speeds up development by automatically generating standard files, making projects more consistent.
-
 2. **Generate Middleware**
 
    * **Description**: Generate middleware files for your Go project with predefined code for things like authentication, logging, CORS, or rate limiting.
@@ -50,43 +41,4 @@ goi build should be for project, and goi serve (start)
    * **Usage**: `goi make config <config_name>`
    * **Example**: `goi make config .env` – Generates a default `.env` configuration file for the project.
    * **Benefit**: Helps create the initial configuration structure, so users don’t have to manually create and remember every key.
-
----
-
-### **Why Add `goi make`?**
-
-1. **Increased Productivity**: Developers will save time by automating the creation of common files and templates.
-2. **Consistency**: Ensures that files are generated with consistent structure and formatting, reducing the chance of errors or missed steps.
-3. **Customization**: Letting users define their own templates or customize existing ones adds flexibility to the tool.
-4. **Project Speed**: New projects or components can be set up quickly, allowing for faster development and prototyping.
-
----
-
-### **Example Usage**
-
-1. **Generate a New Controller**:
-
-   ```bash
-   goi make controller user
-   ```
-
-   This would create a `user_controller.go` file with boilerplate code for routing, validation, and handling requests.
-
-2. **Generate a New Model**:
-
-   ```bash
-   goi make model Product
-   ```
-
-   This would create a `product.go` model file, including fields, GORM tags, and methods for database interaction.
-
-3. **Create a Migration**:
-
-   ```bash
-   goi make migration create_products_table
-   ```
-
-   This would create a migration file for creating a `products` table in the database.
-
----
 
