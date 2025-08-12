@@ -2,13 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"goi/config"
+	"goi/utils"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"goi/config"
-	"goi/utils"
 
 	"github.com/spf13/cobra"
 )

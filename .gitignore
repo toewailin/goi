@@ -20,6 +20,10 @@ profile.cov
 ./DS_Store
 build/
 
+# Ignore RSA private and public key files
+config/rsa_private.pem
+config/rsa_public.pem
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 

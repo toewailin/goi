@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"goi/utils"
 	"log"
 	"os"
 	"os/exec" // For joining paths safely
@@ -107,7 +108,8 @@ func GenerateKeys() error {
 		log.Fatalf("Error saving public key: %v", err)
 	}
 
-	log.Println("RSA key pair generated and saved to files successfully!")
+	utils.PrintSuccess("RSA key pair generated and saved successfully!")
+
 	return nil
 }
 
